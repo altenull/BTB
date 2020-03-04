@@ -55,10 +55,54 @@
       .clock__hand {
         width: 50%;
         height: 6px;
-        background: black;
+        background: rgba(0, 0, 0, 0.7);
         position: absolute;
         top: 50%;
+        transform-origin: right;
+        transform: rotate(90deg);
+        transition: all 0.05s;
+        transition-timing-function: cubic-bezier(0.18, 2.42, 0.54, 0.29);
       }
     </style>
+
+    <script>
+      const hourHand = document.querySelector(".clock__hand--hour");
+      const minHand = document.querySelector(".clock__hand--min");
+      const secondHand = document.querySelector(".clock__hand--second");
+
+      const DEFAULT_DEGREE = 90;
+
+      function updateSecondHand(date) {
+        const seconds = date.getSeconds();
+        const secondsDegree = (seconds / 60) * 360 + DEFAULT_DEGREE;
+
+        secondHand.style.transform = `rotate(${secondsDegree}deg)`;
+      }
+
+      function updateMinHand(date) {
+        const mins = date.getMinutes();
+        const minsDegree = (mins / 60) * 360 + DEFAULT_DEGREE;
+
+        minHand.style.transform = `rotate(${minsDegree}deg)`;
+      }
+
+      function updateHourHand(date) {
+        const hours = date.getHours(); // getHours returns number from 0 to 23.
+        const transformedHours = hours > 12 ? hours - 12 : hours;
+        const hoursDegree = (transformedHours / 12) * 360 + DEFAULT_DEGREE;
+
+        hourHand.style.transform = `rotate(${hoursDegree}deg)`;
+      }
+
+      function updateClock() {
+        const now = new Date();
+
+        updateSecondHand(now);
+        updateMinHand(now);
+        updateHourHand(now);
+      }
+
+      setInterval(updateClock, 1000);
+    </script>
   </body>
 </html>
